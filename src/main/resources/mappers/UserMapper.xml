@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lb.studentapartment.dao.UserMapper">
+    <select id="getallTeacher" resultType="com.lb.studentapartment.bean.Teacher">
+        select * from teacher
+    </select>
+    <select id="getTeacherByMassage" resultType="com.lb.studentapartment.bean.Teacher">
+        select * from teacher where tid=#{tid} and tpwd=#{tpwd}
+    </select>
+    <select id="getStudentByMassage" resultType="com.lb.studentapartment.bean.Student">
+        select * from student where sid=#{sid} and spwd=#{spwd}
+    </select>
+    <select id="getAdminByMassage" resultType="com.lb.studentapartment.bean.Admin">
+        select * from admin where aid=#{aid} and apwd=#{apwd}
+    </select>
+
+    <select id="getallStudent" resultType="com.lb.studentapartment.bean.Student">
+        select * from student
+        <if test="sid!=null">
+            where sid like #{sid}
+        </if>
+        LIMIT #{pageStart},#{pageSize}
+    </select>
+    
+    <select id="getStudentCounts" resultType="java.lang.Integer">
+        select count(*) from student
+        <if test="sid!=null">
+            where sid like #{sid}
+        </if>
+    </select>
+
+
+    <select id="lateStudent" resultType="java.lang.Integer">
+        select count(*) from information_record
+<!--        <if test="sid!=null">-->
+<!--            where sid like #{sid}-->
+<!--        </if>-->
+        where sid=#{sid}
+        and hstate="2"
+    </select>
+
+    <select id="getlateStudent" resultType="com.lb.studentapartment.bean.LateChuxing">
+        select * from information_record
+<!--        <if test="sid!=null">-->
+<!--            where sid like #{sid}-->
+<!--        </if>-->
+        where sid=#{sid}
+        and hstate="2" and htime between #{fhtime} and #{lhtime}
+    </select>
+
+
+    <select id="getMystudent" resultType="com.lb.studentapartment.bean.Student">
+        select * from student
+        <if test="sid!=null">
+            where sid like #{sid} and tid=#{tid}
+        </if>
+
+        LIMIT #{pageStart},#{pageSize}
+    </select>
+
+    <select id="getMystudentCounts" resultType="java.lang.Integer">
+        select count(*) from student
+        <if test="sid!=null">
+            where sid like #{sid} and tid=#{tid}
+        </if>
+
+    </select>
+
+    <select id="queryMystudentchuxing" resultType="com.lb.studentapartment.bean.LateChuxing">
+        select * from information_record
+        <if test="sid!=null">
+            where sid like #{sid} and tid=#{tid}
+        </if>
+        LIMIT #{pageStart},#{pageSize}
+    </select>
+
+    <select id="queryMylate" resultType="java.lang.Integer">
+        select count(*) from information_record
+        <if test="sid!=null">
+            where sid like #{sid} and tid=#{tid}
+        </if>
+    </select>
+
+    <select id="getMylateFI" resultType="com.lb.studentapartment.bean.MylatechuxingFI">
+        select * from information_record
+        where tid=#{tid} and hstate="2" and htime between #{ftime} and #{ltime}
+    </select>
+    <select id="getMylateFS" resultType="com.lb.studentapartment.bean.Student">
+        select * from student where sid=#{sid}
+    </select>
+
+    <select id="getPersonchuxing" resultType="com.lb.studentapartment.bean.StudentchuxingFI">
+        select * from information_record
+        where sid=#{sid} and htime between #{ftime} and #{ltime}
+    </select>
+
+    <select id="getPerson" resultType="com.lb.studentapartment.bean.Student">
+        select * from student where sid=#{sid}
+    </select>
+
+    <insert id="addTecaher" parameterType="com.lb.studentapartment.bean.Teacher">
+        INSERT INTO teacher(tid,tpwd,tname,tphone,permissions) value (#{tid},#{tpwd},#{tname},#{tphone},#{permissions})
+    </insert>
+    <insert id="addStudent" parameterType="com.lb.studentapartment.bean.Student">
+        INSERT INTO student(sid,spwd,sname,tid,state,sphone,snumber,hid,hname,permissions) value (#{sid},#{spwd},#{sname},#{tid},#{state},#{sphone},#{snumber},#{hid},#{hname},#{permissions})
+    </insert>
+
+    <update id="updateTeacher">
+        UPDATE teacher set tpwd=#{tpwd},tname=#{tname},tphone=#{tphone} where tid=#{tid}
+    </update>
+
+    <update id="updateStudent">
+        UPDATE student set spwd=#{spwd},sname=#{sname},tid=#{tid},sphone=#{sphone},hid=#{hid},hname=#{hname} where sid=#{sid}
+    </update>
+
+    <select id="getStudentBycard" resultType="com.lb.studentapartment.bean.Student">
+        select * from student where snumber=#{snumber}
+    </select>
+
+    <insert id="addinfor" parameterType="com.lb.studentapartment.bean.AddInformation">
+        INSERT INTO information_record(number,tid,hid,hname,sid,htime,hstate) value (#{number},#{tid},#{hid},#{hname},#{sid},#{htime},#{hstate})
+    </insert>
+
+    <insert id="addinfor2">
+        insert into information_record(number,tid,hid,hname,sid,htime,hstate) value (#{number},#{tid},#{hid},#{hname},#{sid},#{htime},#{hstate})
+    </insert>
+
+
+<!--    <resultMap id="addmap" type="com.lb.studentapartment.bean.AddInformation">-->
+<!--        <result property="number" column="number"/>-->
+<!--        <result property="tid" column="tid"/>-->
+<!--        <result property="hid" column="hid"/>-->
+<!--        <result property="hname" column="hname"/>-->
+<!--        <result property="sid" column="sid"/>-->
+<!--        <result property="htime" column="htime"/>-->
+<!--        <result property="hstate" column="hstate"/>-->
+<!--    </resultMap>-->
+
+    <update id="updateStudentState">
+        UPDATE student set state=#{state} where snumber=#{snumber}
+    </update>
+
+</mapper>

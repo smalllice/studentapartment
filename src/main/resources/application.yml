@@ -1,0 +1,12 @@
+server:
+  port: 9090
+
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    password: bgg123
+    url: jdbc:mysql://localhost:3306/apartmentbuild?serverTimezone=UTC&useUnicode=ture&characterEncoding=utf-8
+
+mybatis:
+  mapper-locations: classpath:mappers/*.xml
